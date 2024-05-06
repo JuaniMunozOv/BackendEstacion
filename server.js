@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Aplica CORS a todas las respuestas
-app.use(cors());
+app.use(cors({ origin: true }));
 
 // Opciones de conexión para MQTT sobre TLS
 const options = {
