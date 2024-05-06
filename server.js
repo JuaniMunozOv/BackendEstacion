@@ -1,9 +1,13 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const MQTT = require('mqtt');
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Aplica CORS a todas las respuestas
+app.use(cors());
 
 // Opciones de conexión para MQTT sobre TLS
 const options = {
@@ -26,6 +30,8 @@ client.on('connect', () => {
     client.subscribe('esp32/sensorData', (err) => {
         if (!err) {
             console.log('Suscripción exitosa');
+        } else {
+            console.error('Error al suscribir:', err);
         }
     });
 });
@@ -38,7 +44,6 @@ client.on('message', (topic, message) => {
         console.error('Error parsing JSON!', e);
     }
 });
-
 
 app.get('/api/sensor-data', (req, res) => {
     res.json(sensorData);
