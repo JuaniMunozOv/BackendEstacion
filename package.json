@@ -7,9 +7,10 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "dotenv": "^8.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.6.0",
     "express": "^4.19.2",
-    "mqtt": "^4.2.8"
+    "mqtt": "^4.3.8"
   },
   "engines": {
     "node": "14.x"
