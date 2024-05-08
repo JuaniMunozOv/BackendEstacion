@@ -18,7 +18,7 @@ const options = {
     username: process.env.MQTT_USER,
     password: process.env.MQTT_PASSWORD,
     // Si tu broker MQTT requiere un certificado CA específico
-    ca: fs.readFileSync(path.resolve('Cert.pem')) // Descomentar si es necesario
+    ca: fs.readFileSync(path.resolve('BACKEND/Cert.pem')) // Descomentar si es necesario
 };
 
 const client = MQTT.connect(options);
