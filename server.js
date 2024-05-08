@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Aplica CORS a todas las respuestas
-app.use(cors({ origin: true }));
+app.use(cors({ origin: 'https://juanimunozov.github.io/EstacionMeteorologica/' }));
 
 // Opciones de conexión para MQTT sobre TLS
 const options = {
@@ -45,6 +45,11 @@ client.on('message', (topic, message) => {
         console.error('Error parsing JSON!', e);
     }
 });
+
+client.on('error', (error) => {
+    console.error('Error en la conexión MQTT:', error);
+});
+
 
 app.get('/api/sensor-data', (req, res) => {
     res.json(sensorData);
