@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Aplica CORS a todas las respuestas
-app.use(cors({ origin: 'https://juanimunozov.github.io/EstacionMeteorologica/' }));
+app.use(cors({ origin: 'https://juanimunozov.github.io/EstacionMeteorologica' }));
 
 // Opciones de conexión para MQTT sobre TLS
 const options = {
