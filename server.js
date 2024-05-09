@@ -51,7 +51,7 @@ client.on('error', (error) => {
 });
 
 
-app.get('/api/sensor-data', (req, res) => {
+app.get('/api/sensor-data', (_req, res) => {
     res.json(sensorData);
 });
 
