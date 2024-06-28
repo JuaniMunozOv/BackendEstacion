@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path'); // Asegúrate de importar 'path'
 const MQTT = require('mqtt');
 const app = express();
 const port = process.env.PORT || 3001;
@@ -18,7 +19,7 @@ const options = {
     username: process.env.MQTT_USER,
     password: process.env.MQTT_PASSWORD,
     // Si tu broker MQTT requiere un certificado CA específico
-    ca: fs.readFileSync(path.resolve('BACKEND/Cert.pem')) // Descomentar si es necesario
+    ca: fs.readFileSync(path.resolve('Cert.pem')) // Asegúrate de que el certificado esté en la ruta correcta
 };
 
 const client = MQTT.connect(options);
@@ -49,7 +50,6 @@ client.on('message', (topic, message) => {
 client.on('error', (error) => {
     console.error('Error en la conexión MQTT:', error);
 });
-
 
 app.get('/api/sensor-data', (_req, res) => {
     res.json(sensorData);
