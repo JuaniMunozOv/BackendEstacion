@@ -3,22 +3,22 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
-const path = require('path'); 
 const MQTT = require('mqtt');
 const app = express();
 const port = process.env.PORT || 3001;
 
-
+// Aplica CORS a todas las respuestas
 app.use(cors({ origin: 'https://juanimunozov.github.io/EstacionMeteorologica' }));
 
-
+// Opciones de conexión para MQTT sobre TLS
 const options = {
     host: process.env.MQTT_HOST,
     port: process.env.MQTT_PORT,
     protocol: 'mqtts',
     username: process.env.MQTT_USER,
     password: process.env.MQTT_PASSWORD,
-    ca: fs.readFileSync(path.resolve('Cert.pem')) 
+    // Si tu broker MQTT requiere un certificado CA específico
+    ca: fs.readFileSync(path.resolve('BACKEND/Cert.pem')) // Descomentar si es necesario
 };
 
 const client = MQTT.connect(options);
@@ -49,6 +49,7 @@ client.on('message', (topic, message) => {
 client.on('error', (error) => {
     console.error('Error en la conexión MQTT:', error);
 });
+
 
 app.get('/api/sensor-data', (_req, res) => {
     res.json(sensorData);
