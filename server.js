@@ -3,7 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 const MQTT = require('mqtt');
+const admin = require('firebase-admin');
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -18,8 +20,16 @@ const options = {
     username: process.env.MQTT_USER,
     password: process.env.MQTT_PASSWORD,
     // Si tu broker MQTT requiere un certificado CA específico
-    ca: fs.readFileSync(path.resolve('BACKEND/Cert.pem')) // Descomentar si es necesario
+    // ca: fs.readFileSync(path.resolve('BACKEND/Cert.pem')) // Descomentar si es necesario
 };
+
+// Inicializa Firebase Admin SDK
+const serviceAccount = require(path.resolve(__dirname, 'serviceAccountKey.json'));
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://estacion-meteorologia-default-rtdb.firebaseio.com'
+});
+const db = admin.database();
 
 const client = MQTT.connect(options);
 
@@ -41,6 +51,10 @@ client.on('message', (topic, message) => {
     console.log(`Mensaje recibido en el topic ${topic}: ${message.toString()}`);
     try {
         sensorData = JSON.parse(message.toString());
+        // Guarda los datos en Firebase RTDB bajo la rama 'sensores'
+        db.ref('sensores').push(sensorData)
+            .then(() => console.log('Datos guardados en Firebase'))
+            .catch((err) => console.error('Error al guardar en Firebase:', err));
     } catch (e) {
         console.error('Error parsing JSON!', e);
     }
